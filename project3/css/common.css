@@ -1,0 +1,8 @@
+@charset "utf-8";
+
+input[type=name],input[type=email],input[type=text],textarea[name=text]{padding:0 20px;font-family:"Open Sans","Noto Sans KR",sans-serif;font-weight:600;width:455px;height:50px;background-color:#fff;color:#b18978;border:none;border-radius:7px;outline:none;box-sizing:border-box}
+input[type=name::placeholder],input[type=email]::placeholder,input[type=text]::placeholder,textarea[name=text]{color:#b18978}
+input[type=name]:focus,input[type=email]:focus,input[type=text]:focus,textarea[name=text]{border-color:#b18978}
+input[type=submit]{padding:0 20px;width:240px;height:65px;line-height:61px;font-family:"Open Sans","Noto Sans KR",sans-serif;font-size:14px;font-weight:700;background-color:#b18978;color:#fff;border:none;border-radius:5px;outline:none;cursor:pointer;transition:background-color .4s}
+input[type=submit]:hover{background-color:#cf7965}
+input[type=submit]:focus{background-color:#cf7965}
