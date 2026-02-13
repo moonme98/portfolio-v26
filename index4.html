@@ -1,0 +1,198 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOON MIJIN | Front-end Portfolio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 기본 초기화 */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { 
+            width: 100%; height: 100%; 
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background-color: #f2ede4;
+        }
+
+        /* --- macOS 상단 바 --- */
+        #header .top {
+            position: fixed; top: 0; left: 0; width: 100%; height: 32px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(15px);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; z-index: 1000;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .mac-dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ff5f56; } .yellow { background: #ffbd2e; } .green { background: #27c93f; }
+
+        #gnb ul { display: flex; list-style: none; gap: 5px; }
+        #gnb ul li a { 
+            text-decoration: none; color: #444; font-size: 13px; font-weight: 500;
+            padding: 4px 12px; border-radius: 4px;
+        }
+
+        /* --- 메인 레이아웃 --- */
+        .header_inner {
+            height: 100vh; width: 100%;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            position: relative;
+        }
+
+        /* --- 폴더 및 샌드위치 구조 --- */
+        .folder-wrapper {
+            position: relative; 
+            width: 340px; height: 240px;
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.12));
+            z-index: 2;
+            perspective: 1000px;
+        }
+
+        /* [레이어 1] 흰 종이 */
+        .folder-paper {
+            position: absolute; top: 10px; left: 10px; right: 10px; bottom: 40px;
+            background: #fff; border-radius: 10px;
+            transform: translateY(-20px); z-index: 1;
+            transition: 0.5s ease;
+        }
+
+        /* [레이어 2] Portfolio 글자 (기존 사이즈 11rem) */
+        .main-title {
+            position: absolute;
+            font-family: 'Playfair Display', serif;
+            font-size: 11rem; font-style: italic; color: #1a1a1a;
+            letter-spacing: -2px; z-index: 2;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -85%);
+            transition: 0.5s ease;
+            white-space: nowrap;
+        }
+
+        /* [레이어 3] 폴더 앞면 */
+        .folder-main {
+            width: 100%; height: 100%;
+            background: linear-gradient(145deg, #8cbdf9, #6da2e2);
+            border-radius: 0 20px 20px 20px;
+            position: relative; z-index: 3;
+            display: flex; align-items: center; justify-content: center;
+            transition: 0.5s ease;
+            transform-origin: bottom;
+        }
+        .folder-main::before {
+            content: ''; position: absolute; top: -18px; left: 0;
+            width: 120px; height: 20px; background: #6da2e2; border-radius: 12px 12px 0 0;
+        }
+        
+        .folder-welcome-text {
+            color: white; font-family: 'Playfair Display', serif;
+            font-size: 3rem; font-style: italic; font-weight: 700;
+        }
+
+        /* --- PC 기존 호버 효과 --- */
+        .folder-wrapper:hover .folder-main { transform: rotateX(-20px); }
+        .folder-wrapper:hover .folder-paper { transform: translateY(-50px); }
+        .folder-wrapper:hover .main-title { transform: translate(-50%, -110%); }
+
+        /* --- 이름 섹션 --- */
+        .desc { margin-top: 40px; text-align: center; }
+        .desc strong { font-family: 'Playfair Display', serif; font-size: 3.2rem; display: block; color: #1a1a1a; }
+        .desc p { font-size: 1rem; color: #666; letter-spacing: 4px; text-transform: uppercase; margin-top: 5px; }
+
+        /* --- 사이드바 (기존 디자인 복구) --- */
+        .controller {
+            position: fixed; right: 40px; top: 50%; transform: translateY(-50%);
+            z-index: 100;
+        }
+        .controller ul { list-style: none; display: flex; flex-direction: column; gap: 25px; }
+        .controller a {
+            writing-mode: vertical-rl; text-decoration: none;
+            font-size: 11px; color: #555; font-weight: 600; letter-spacing: 2px;
+            transition: 0.3s;
+        }
+        .controller a:hover { color: #007aff; }
+
+        /* 스크롤 애니메이션 */
+        .pagedown {
+            position: absolute; bottom: 40px;
+            font-size: 12px; letter-spacing: 3px; color: #999;
+            text-transform: uppercase; animation: bounce 2s infinite;
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* --- 모바일 반응형 --- */
+        @media (max-width: 768px) {
+            #gnb { display: none; }
+            .header_inner { padding-top: 50px; }
+            
+            /* 파일 크기는 유지하고 글자만 위로 완전히 빼기 */
+            .folder-wrapper { width: 280px; height: 200px; margin-top: 80px; }
+            .main-title { 
+                font-size: 5.5rem; 
+                transform: translate(-50%, -160%); /* 글자를 폴더 밖으로 완전히 올림 */
+            }
+            .folder-welcome-text { font-size: 2.2rem; }
+            .desc strong { font-size: 2.2rem; }
+            
+            /* 모바일 터치 시 효과 */
+            .folder-wrapper:active .folder-paper { transform: translateY(-40px); }
+            .folder-wrapper:active .main-title { transform: translate(-50%, -180%); }
+
+            .controller { right: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header id="header">
+        <div class="top">
+            <div class="mac-dots"><div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div></div>
+            <nav id="gnb">
+                <ul>
+                    <li><a href="#none">HOME</a></li>
+                    <li><a href="#none">ABOUT</a></li>
+                    <li><a href="#none">SPECIALITY</a></li>
+                    <li><a href="#none">PORTFOLIO</a></li>
+                    <li><a href="#none">CONTACT</a></li>
+                </ul>
+            </nav>
+            <div style="width: 80px;"></div>
+        </div>
+
+        <div class="header_inner">
+            <div class="folder-wrapper">
+                <div class="folder-paper"></div>
+                <h2 class="main-title">Portfolio</h2>
+                <div class="folder-main">
+                    <span class="folder-welcome-text">Welcome</span>
+                </div>
+            </div>
+
+            <div class="desc">
+                <strong>MOON MIJIN</strong>
+                <p>Front-end Developer</p>
+            </div>
+
+            <div class="pagedown">Scroll</div>
+        </div>
+    </header>
+
+    <div class="controller">
+        <ul>
+            <li><a href="#none">HOME</a></li>
+            <li><a href="#none">ABOUT</a></li>
+            <li><a href="#none">SPECIALITY</a></li>
+            <li><a href="#none">PORTFOLIO</a></li>
+            <li><a href="#none">CONTACT</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>
